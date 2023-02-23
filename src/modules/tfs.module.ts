@@ -13,6 +13,6 @@ import { PartyExternalRatingModule } from './party-external-rating/party-externa
       partyExternalRatingsProviderClass: AcbsPartyExternalRatingsProvider,
     }),
   ],
-  exports: [PartyExternalRatingModule],
+  exports: [PartyExternalRatingModule, AcbsModule],
 })
 export class TfsModule {}
