@@ -1,4 +1,3 @@
-jest.mock('@nestjs/axios');
 import { HttpService } from '@nestjs/axios';
 import { GetPartyBySearchTextService } from '@ukef/modules/party/get-party-by-search-text.service';
 import { GetPartyBySearchTextFailedException } from '@ukef/modules/party/get-party-by-search-text-failed.exception';
