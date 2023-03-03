@@ -1,5 +1,4 @@
 import { Controller, Get, Query } from '@nestjs/common';
-
 import { AcbsAuthenticationService } from '../acbs/acbs-authentication.service';
 import { GetPartyBySearchTextResponseElement } from './dto/get-party-by-search-text-response-element.dto';
 import { GetPartyBySearchTextService } from './get-party-by-search-text.service';

@@ -2,7 +2,6 @@ import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
-
 import AcbsConfig from '../../config/acbs.config';
 import { AcbsGetPartyBySearchTextResponseElement } from './dto/acbs-get-party-by-search-text-response-element.dto';
 import { GetPartyBySearchTextResponseElement } from './dto/get-party-by-search-text-response-element.dto';
