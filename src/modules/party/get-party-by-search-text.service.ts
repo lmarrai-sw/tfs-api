@@ -6,7 +6,7 @@ import { lastValueFrom } from 'rxjs';
 import AcbsConfig from '../../config/acbs.config';
 import { AcbsGetPartyBySearchTextResponseElement } from './dto/acbs-get-party-by-search-text-response-element.dto';
 import { GetPartyBySearchTextResponseElement } from './dto/get-party-by-search-text-response-element.dto';
-import { GetPartyBySearchTextFailedException } from './get-party-by-search-text-failed.exception';
+import { GetPartyBySearchTextFailedException } from './exception/get-party-by-search-text-failed.exception';
 
 @Injectable()
 export class GetPartyBySearchTextService {

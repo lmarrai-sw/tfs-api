@@ -1,12 +1,11 @@
 import { HttpService } from '@nestjs/axios';
+import { GetPartyBySearchTextFailedException } from '@ukef/modules/party/exception/get-party-by-search-text-failed.exception';
 import { GetPartyBySearchTextService } from '@ukef/modules/party/get-party-by-search-text.service';
-import { GetPartyBySearchTextFailedException } from '@ukef/modules/party/get-party-by-search-text-failed.exception';
 import { AxiosError } from 'axios';
 import { when } from 'jest-when';
 import { of, throwError } from 'rxjs';
 
-// eslint-disable-next-line jest/unbound-method
-describe('PartyController', () => {
+describe('GetPartyBySearchTextService', () => {
   const config = { baseUrl: 'the base url' };
   const idToken = 'the id token';
   const searchText = 'searchText';
@@ -36,6 +35,17 @@ describe('PartyController', () => {
       OfficerRiskDate: '2018-03-21T00:00:00Z',
       PrimaryAddress: { Country: { CountryCode: 'DZA' } },
     },
+    {
+      PartyAlternateIdentifier: '00999999',
+      IndustryClassification: { IndustryClassificationCode: '0001' },
+      PartyName1: 'AV 2022-10-1039',
+      PartyName2: '',
+      PartyName3: '',
+      MinorityClass: { MinorityClassCode: '70' },
+      CitizenshipClass: { CitizenshipClassCode: '1' },
+      OfficerRiskDate: '2022-10-10T00:00:00Z',
+      PrimaryAddress: { Country: { CountryCode: 'GBR' } },
+    },
   ];
 
   beforeEach(() => {
@@ -60,6 +70,17 @@ describe('PartyController', () => {
           citizenshipClass: '2',
           officerRiskDate: '2018-03-21',
           countryCode: 'DZA',
+        },
+        {
+          alternateIdentifier: '00999999',
+          industryClassification: '0001',
+          name1: 'AV 2022-10-1039',
+          name2: '',
+          name3: '',
+          smeType: '70',
+          citizenshipClass: '1',
+          officerRiskDate: '2022-10-10',
+          countryCode: 'GBR',
         },
       ]);
     });

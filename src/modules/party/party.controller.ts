@@ -1,7 +1,9 @@
 import { Controller, Get, Query } from '@nestjs/common';
+import { ApiInternalServerErrorResponse, ApiOkResponse, ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 import { AcbsAuthenticationService } from '../acbs/acbs-authentication.service';
-import { GetPartyBySearchTextResponseElement } from './dto/get-party-by-search-text-response-element.dto';
+import { GetPartyBySearchTextResponse, GetPartyBySearchTextResponseElement } from './dto/get-party-by-search-text-response-element.dto';
+import { PartyQueryDto } from './dto/party-query.dto';
 import { GetPartyBySearchTextService } from './get-party-by-search-text.service';
 
 @Controller('party')
@@ -12,9 +14,20 @@ export class PartyController {
   ) {}
 
   @Get()
-  async getPartyBySearchText(@Query('searchText') searchText): Promise<GetPartyBySearchTextResponseElement[]> {
+  @ApiOperation({
+    summary: 'Get all parties matching the specified search text.',
+  })
+  @ApiOkResponse({
+    description: 'The matching parties have been successfully retrieved.',
+    type: GetPartyBySearchTextResponseElement,
+    isArray: true,
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'An internal server error has occurred.',
+  })
+  async getPartyBySearchText(@Query() query: PartyQueryDto): Promise<GetPartyBySearchTextResponse> {
     const token = await this.acbsAuthenticationService.getIdToken();
-    const response = await this.getPartyBySearchTextService.getPartyBySearchText(token, searchText);
+    const response = await this.getPartyBySearchTextService.getPartyBySearchText(token, query.searchText);
 
     return response;
   }

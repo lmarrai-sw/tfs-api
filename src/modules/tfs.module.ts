@@ -3,6 +3,7 @@ import { AcbsModule } from '@ukef/module/acbs/acbs.module';
 
 import { AcbsAdapterModule } from './acbs-adapter/acbs-adapter.module';
 import { AcbsPartyExternalRatingsProvider } from './acbs-adapter/acbs-party-external-ratings.provider';
+import { PartyModule } from './party/party.module';
 import { PartyExternalRatingModule } from './party-external-rating/party-external-rating.module';
 
 @Module({
@@ -12,7 +13,8 @@ import { PartyExternalRatingModule } from './party-external-rating/party-externa
       imports: [AcbsAdapterModule, AcbsModule],
       partyExternalRatingsProviderClass: AcbsPartyExternalRatingsProvider,
     }),
+    PartyModule,
   ],
-  exports: [PartyExternalRatingModule, AcbsModule],
+  exports: [PartyExternalRatingModule, AcbsModule, PartyModule],
 })
 export class TfsModule {}
