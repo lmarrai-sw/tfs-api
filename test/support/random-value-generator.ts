@@ -12,8 +12,13 @@ export class RandomValueGenerator {
     return this.chance.string();
   }
 
-  public stringOfNumericCharacters(): string {
-    return this.chance.string({ pool: '0123456789' });
+  public stringOfNumericCharacters(minLength?: number): string {
+    const stringOptions: Partial<Chance.StringOptions> = { pool: '0123456789' };
+    if (minLength) {
+      const length = this.chance.integer({ min: minLength, max: Math.max(20, minLength * 2) });
+      stringOptions.length = minLength;
+    }
+    return this.chance.string(stringOptions);
   }
 
   public probabilityFloat(): number {
