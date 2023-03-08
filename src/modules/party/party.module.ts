@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AcbsModule } from '../acbs/acbs.module';
 import { GetPartyBySearchTextService } from './get-party-by-search-text.service';
 import { PartyController } from './party.controller';
+import { PartyService } from './party.service';
 @Module({
   imports: [
     HttpModule.registerAsync({
@@ -18,6 +19,6 @@ import { PartyController } from './party.controller';
     AcbsModule,
   ],
   controllers: [PartyController],
-  providers: [GetPartyBySearchTextService],
+  providers: [GetPartyBySearchTextService, PartyService],
 })
 export class PartyModule {}
