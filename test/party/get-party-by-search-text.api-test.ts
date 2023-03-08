@@ -5,7 +5,7 @@ import nock from 'nock';
 describe('GET /party?searchText={searchText}', () => {
   const valueGenerator = new RandomValueGenerator();
 
-  const searchText = valueGenerator.stringOfNumericCharacters();
+  const searchText = valueGenerator.stringOfNumericCharacters(3);
   const idToken = valueGenerator.string();
 
   const partyAlternateIdentifierA = searchText + '0';
