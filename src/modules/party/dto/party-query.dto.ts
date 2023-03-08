@@ -5,5 +5,5 @@ export class PartyQueryDto {
   @IsNotEmpty()
   @Length(3)
   @ApiProperty()
-  public searchText: string;
+  searchText: string;
 }
