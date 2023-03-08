@@ -8,12 +8,11 @@ import { of, throwError } from 'rxjs';
 describe('GetPartyBySearchTextService', () => {
   const config = { baseUrl: 'the base url' };
   const idToken = 'the id token';
-  const searchText = 'searchText';
 
   let httpService: HttpService;
   let getPartyBySearchTextService: GetPartyBySearchTextService;
 
-  const expectedGetPartyBySearchTextArguments: [string, object] = [
+  const getExpectedGetPartyBySearchTextArguments = (searchText: string): [string, object] => [
     '/Party/Search/' + searchText,
     {
       baseURL: 'the base url',
@@ -54,8 +53,43 @@ describe('GetPartyBySearchTextService', () => {
   });
 
   describe('successful request', () => {
-    it('returns matching party/parties in the correct format if the request is successful', async () => {
-      mockSuccessfulAcbsGetPartyBySearchTextRequest();
+    it('returns matching parties in the correct format if the request is successful', async () => {
+      const searchText = 'searchText';
+
+      mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText);
+
+      const response = await getPartyBySearchTextService.getPartyBySearchText(idToken, searchText);
+
+      expect(response).toStrictEqual([
+        {
+          alternateIdentifier: '00309999',
+          industryClassification: '2401',
+          name1: 'ACTUAL IMPORT EXPORT',
+          name2: '',
+          name3: '',
+          smeType: '20',
+          citizenshipClass: '2',
+          officerRiskDate: '2018-03-21',
+          countryCode: 'DZA',
+        },
+        {
+          alternateIdentifier: '00999999',
+          industryClassification: '0001',
+          name1: 'AV 2022-10-1039',
+          name2: '',
+          name3: '',
+          smeType: '70',
+          citizenshipClass: '1',
+          officerRiskDate: '2022-10-10',
+          countryCode: 'GBR',
+        },
+      ]);
+    });
+
+    it('returns matching parties in the correct format if the query parameter searchText is exactly 3 characters and the request is successful', async () => {
+      const searchText = '999';
+
+      mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText);
 
       const response = await getPartyBySearchTextService.getPartyBySearchText(idToken, searchText);
 
@@ -88,11 +122,12 @@ describe('GetPartyBySearchTextService', () => {
 
   describe('failed request', () => {
     it('throws a GetPartyBySearchTextFailedException if there is an error when getting parties from ACBS', async () => {
+      const searchText = 'searchText';
       const getPartyError = new AxiosError();
 
       // eslint-disable-next-line jest/unbound-method
       when(httpService.get)
-        .calledWith(...expectedGetPartyBySearchTextArguments)
+        .calledWith(...getExpectedGetPartyBySearchTextArguments(searchText))
         .mockReturnValueOnce(throwError(() => getPartyError));
 
       const responsePromise = getPartyBySearchTextService.getPartyBySearchText(idToken, searchText);
@@ -127,10 +162,10 @@ describe('GetPartyBySearchTextService', () => {
     });
   });
 
-  function mockSuccessfulAcbsGetPartyBySearchTextRequest(): void {
+  function mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText: string): void {
     // eslint-disable-next-line jest/unbound-method
     when(httpService.get)
-      .calledWith(...expectedGetPartyBySearchTextArguments)
+      .calledWith(...getExpectedGetPartyBySearchTextArguments(searchText))
       .mockReturnValueOnce(
         of({
           data: acbsResponse,
