@@ -6,7 +6,7 @@ import { GetPartyBySearchTextResponse, GetPartyBySearchTextResponseElement } fro
 import { PartyQueryDto } from './dto/party-query.dto';
 import { GetPartyBySearchTextService } from './get-party-by-search-text.service';
 
-@Controller('party')
+@Controller('parties')
 export class PartyController {
   constructor(
     private readonly acbsAuthenticationService: AcbsAuthenticationService,
