@@ -8,10 +8,7 @@ import { PartyService } from './party.service';
 
 @Controller('party')
 export class PartyController {
-  constructor(
-    private readonly acbsAuthenticationService: AcbsAuthenticationService,
-    private readonly partyService: PartyService,
-  ) {}
+  constructor(private readonly acbsAuthenticationService: AcbsAuthenticationService, private readonly partyService: PartyService) {}
 
   @Get()
   @ApiOperation({

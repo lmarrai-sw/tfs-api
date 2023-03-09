@@ -3,8 +3,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AcbsModule } from '@ukef/module/acbs/acbs.module';
 
-import { PartyService } from './party.service';
 import { PartyController } from './party.controller';
+import { PartyService } from './party.service';
 @Module({
   imports: [
     HttpModule.registerAsync({
