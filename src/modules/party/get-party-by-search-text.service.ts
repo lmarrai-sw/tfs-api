@@ -39,7 +39,7 @@ export class GetPartyBySearchTextService {
     };
 
     const response = await lastValueFrom(
-      this.httpService.get<AcbsGetPartyBySearchTextResponseElement[]>(GetPartyBySearchTextService.path + '/' + searchText, acbsRequest),
+      this.httpService.get<AcbsGetPartyBySearchTextResponseElement[]>(`${GetPartyBySearchTextService.path}/${searchText}`, acbsRequest),
     )
       .then((acbsResponse) =>
         acbsResponse.data.map((element) => ({
