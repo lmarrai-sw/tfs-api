@@ -4,6 +4,7 @@ import { GetPartyBySearchTextService } from '@ukef/modules/party/get-party-by-se
 import { AxiosError } from 'axios';
 import { when } from 'jest-when';
 import { of, throwError } from 'rxjs';
+
 import { AcbsGetPartyBySearchTextResponseElement } from './dto/acbs-get-party-by-search-text-response-element.dto';
 
 describe('GetPartyBySearchTextService', () => {
