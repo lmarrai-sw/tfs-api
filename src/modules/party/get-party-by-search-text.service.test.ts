@@ -74,7 +74,7 @@ describe('GetPartyBySearchTextService', () => {
 
       mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText, acbsResponse);
 
-      const response = await getPartyBySearchTextService.getPartyBySearchText(idToken, searchText);
+      const response = await getPartyBySearchTextService.getPartiesBySearchText(idToken, searchText);
 
       expect(response).toStrictEqual([
         {
@@ -107,7 +107,7 @@ describe('GetPartyBySearchTextService', () => {
 
       mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText, acbsResponse);
 
-      const response = await getPartyBySearchTextService.getPartyBySearchText(idToken, searchText);
+      const response = await getPartyBySearchTextService.getPartiesBySearchText(idToken, searchText);
 
       expect(response).toStrictEqual([
         {
@@ -140,7 +140,7 @@ describe('GetPartyBySearchTextService', () => {
 
       mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText, acbsResponseWithNullOfficerRiskDate);
 
-      const response = await getPartyBySearchTextService.getPartyBySearchText(idToken, searchText);
+      const response = await getPartyBySearchTextService.getPartiesBySearchText(idToken, searchText);
 
       expect(response).toStrictEqual([
         {
@@ -168,7 +168,7 @@ describe('GetPartyBySearchTextService', () => {
         .calledWith(...getExpectedGetPartyBySearchTextArguments(searchText))
         .mockReturnValueOnce(throwError(() => getPartyError));
 
-      const responsePromise = getPartyBySearchTextService.getPartyBySearchText(idToken, searchText);
+      const responsePromise = getPartyBySearchTextService.getPartiesBySearchText(idToken, searchText);
 
       await expect(responsePromise).rejects.toBeInstanceOf(GetPartyBySearchTextFailedException);
       await expect(responsePromise).rejects.toThrow('Failed to get parties from ACBS.');
@@ -176,7 +176,7 @@ describe('GetPartyBySearchTextService', () => {
     });
 
     it('throws a GetPartyBySearchTextFailedException if the required query parameter searchText is not specified', async () => {
-      const responsePromise = getPartyBySearchTextService.getPartyBySearchText(idToken, null);
+      const responsePromise = getPartyBySearchTextService.getPartiesBySearchText(idToken, null);
 
       await expect(responsePromise).rejects.toBeInstanceOf(GetPartyBySearchTextFailedException);
       await expect(responsePromise).rejects.toThrow('The required query parameter searchText was not specified.');
@@ -184,7 +184,7 @@ describe('GetPartyBySearchTextService', () => {
     });
 
     it('throws a GetPartyBySearchTextFailedException if the query parameter searchText is empty', async () => {
-      const responsePromise = getPartyBySearchTextService.getPartyBySearchText(idToken, '');
+      const responsePromise = getPartyBySearchTextService.getPartiesBySearchText(idToken, '');
 
       await expect(responsePromise).rejects.toBeInstanceOf(GetPartyBySearchTextFailedException);
       await expect(responsePromise).rejects.toThrow('The query parameter searchText must be non-empty.');
@@ -192,7 +192,7 @@ describe('GetPartyBySearchTextService', () => {
     });
 
     it('throws a GetPartyBySearchTextFailedException if the query parameter searchText is less than 3 characters', async () => {
-      const responsePromise = getPartyBySearchTextService.getPartyBySearchText(idToken, '00');
+      const responsePromise = getPartyBySearchTextService.getPartiesBySearchText(idToken, '00');
 
       await expect(responsePromise).rejects.toBeInstanceOf(GetPartyBySearchTextFailedException);
       await expect(responsePromise).rejects.toThrow('The query parameter searchText must be at least 3 characters.');

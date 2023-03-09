@@ -25,9 +25,9 @@ export class PartyController {
   @ApiInternalServerErrorResponse({
     description: 'An internal server error has occurred.',
   })
-  async getPartyBySearchText(@Query() query: PartyQueryDto): Promise<GetPartyBySearchTextResponse> {
+  async getPartiesBySearchText(@Query() query: PartyQueryDto): Promise<GetPartyBySearchTextResponse> {
     const token = await this.acbsAuthenticationService.getIdToken();
-    const response = await this.getPartyBySearchTextService.getPartyBySearchText(token, query.searchText);
+    const response = await this.getPartyBySearchTextService.getPartiesBySearchText(token, query.searchText);
 
     return response;
   }

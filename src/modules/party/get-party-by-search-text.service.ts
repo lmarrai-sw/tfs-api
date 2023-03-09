@@ -18,7 +18,7 @@ export class GetPartyBySearchTextService {
     private readonly httpService: HttpService,
   ) {}
 
-  async getPartyBySearchText(token: string, searchText: string): Promise<GetPartyBySearchTextResponseElement[]> {
+  async getPartiesBySearchText(token: string, searchText: string): Promise<GetPartyBySearchTextResponseElement[]> {
     if (searchText === null) {
       throw new GetPartyBySearchTextFailedException('The required query parameter searchText was not specified.');
     }
