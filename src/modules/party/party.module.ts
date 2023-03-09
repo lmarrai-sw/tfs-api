@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AcbsModule } from '@ukef/module/acbs/acbs.module';
 
-import { GetPartyBySearchTextService } from './get-party-by-search-text.service';
+import { PartyService } from './party.service';
 import { PartyController } from './party.controller';
 @Module({
   imports: [
@@ -18,6 +18,6 @@ import { PartyController } from './party.controller';
     AcbsModule,
   ],
   controllers: [PartyController],
-  providers: [GetPartyBySearchTextService],
+  providers: [PartyService],
 })
 export class PartyModule {}

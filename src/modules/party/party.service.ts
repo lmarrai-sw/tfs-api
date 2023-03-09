@@ -9,8 +9,8 @@ import { GetPartyBySearchTextResponseElement } from './dto/get-party-by-search-t
 import { GetPartyBySearchTextFailedException } from './exception/get-party-by-search-text-failed.exception';
 
 @Injectable()
-export class GetPartyBySearchTextService {
-  private static readonly path = '/Party/Search';
+export class PartyService {
+  private static readonly getPartiesBySearchTextPath = '/Party/Search';
 
   constructor(
     @Inject(AcbsConfig.KEY)
@@ -39,7 +39,7 @@ export class GetPartyBySearchTextService {
     };
 
     const response = await lastValueFrom(
-      this.httpService.get<AcbsGetPartyBySearchTextResponseElement[]>(`${GetPartyBySearchTextService.path}/${searchText}`, acbsRequest),
+      this.httpService.get<AcbsGetPartyBySearchTextResponseElement[]>(`${PartyService.getPartiesBySearchTextPath}/${searchText}`, acbsRequest),
     )
       .then((acbsResponse) =>
         acbsResponse.data.map((element) => ({

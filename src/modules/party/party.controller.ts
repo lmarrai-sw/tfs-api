@@ -4,13 +4,13 @@ import { ApiInternalServerErrorResponse, ApiOkResponse, ApiOperation, ApiQuery }
 import { AcbsAuthenticationService } from '../acbs/acbs-authentication.service';
 import { GetPartyBySearchTextResponse, GetPartyBySearchTextResponseElement } from './dto/get-party-by-search-text-response-element.dto';
 import { PartyQueryDto } from './dto/party-query.dto';
-import { GetPartyBySearchTextService } from './get-party-by-search-text.service';
+import { PartyService } from './party.service';
 
 @Controller('party')
 export class PartyController {
   constructor(
     private readonly acbsAuthenticationService: AcbsAuthenticationService,
-    private readonly getPartyBySearchTextService: GetPartyBySearchTextService,
+    private readonly partyService: PartyService,
   ) {}
 
   @Get()
@@ -27,7 +27,7 @@ export class PartyController {
   })
   async getPartiesBySearchText(@Query() query: PartyQueryDto): Promise<GetPartyBySearchTextResponse> {
     const token = await this.acbsAuthenticationService.getIdToken();
-    const response = await this.getPartyBySearchTextService.getPartiesBySearchText(token, query.searchText);
+    const response = await this.partyService.getPartiesBySearchText(token, query.searchText);
 
     return response;
   }
