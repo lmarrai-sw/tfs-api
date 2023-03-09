@@ -50,7 +50,7 @@ export class GetPartyBySearchTextService {
           name3: element.PartyName3,
           smeType: element.MinorityClass.MinorityClassCode,
           citizenshipClass: element.CitizenshipClass.CitizenshipClassCode,
-          officerRiskDate: element.OfficerRiskDate.slice(0, 10),
+          officerRiskDate: element.OfficerRiskDate ? element.OfficerRiskDate.slice(0, 10) : null,
           countryCode: element.PrimaryAddress.Country.CountryCode,
         })),
       )

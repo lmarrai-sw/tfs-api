@@ -4,6 +4,7 @@ import { GetPartyBySearchTextService } from '@ukef/modules/party/get-party-by-se
 import { AxiosError } from 'axios';
 import { when } from 'jest-when';
 import { of, throwError } from 'rxjs';
+import { AcbsGetPartyBySearchTextResponseElement } from './dto/acbs-get-party-by-search-text-response-element.dto';
 
 describe('GetPartyBySearchTextService', () => {
   const config = { baseUrl: 'the base url' };
@@ -22,7 +23,7 @@ describe('GetPartyBySearchTextService', () => {
     },
   ];
 
-  const acbsResponse = [
+  const acbsResponse: AcbsGetPartyBySearchTextResponseElement[] = [
     {
       PartyAlternateIdentifier: '00309999',
       IndustryClassification: { IndustryClassificationCode: '2401' },
@@ -47,6 +48,20 @@ describe('GetPartyBySearchTextService', () => {
     },
   ];
 
+  const acbsResponseWithNullOfficerRiskDate: AcbsGetPartyBySearchTextResponseElement[] = [
+    {
+      PartyAlternateIdentifier: '00309999',
+      IndustryClassification: { IndustryClassificationCode: '2401' },
+      PartyName1: 'ACTUAL IMPORT EXPORT',
+      PartyName2: '',
+      PartyName3: '',
+      MinorityClass: { MinorityClassCode: '20' },
+      CitizenshipClass: { CitizenshipClassCode: '2' },
+      OfficerRiskDate: null,
+      PrimaryAddress: { Country: { CountryCode: 'DZA' } },
+    },
+  ];
+
   beforeEach(() => {
     httpService = new HttpService();
     getPartyBySearchTextService = new GetPartyBySearchTextService(config, httpService);
@@ -56,7 +71,7 @@ describe('GetPartyBySearchTextService', () => {
     it('returns matching parties in the correct format if the request is successful', async () => {
       const searchText = 'searchText';
 
-      mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText);
+      mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText, acbsResponse);
 
       const response = await getPartyBySearchTextService.getPartyBySearchText(idToken, searchText);
 
@@ -89,7 +104,7 @@ describe('GetPartyBySearchTextService', () => {
     it('returns matching parties in the correct format if the query parameter searchText is exactly 3 characters and the request is successful', async () => {
       const searchText = '999';
 
-      mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText);
+      mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText, acbsResponse);
 
       const response = await getPartyBySearchTextService.getPartyBySearchText(idToken, searchText);
 
@@ -115,6 +130,28 @@ describe('GetPartyBySearchTextService', () => {
           citizenshipClass: '1',
           officerRiskDate: '2022-10-10',
           countryCode: 'GBR',
+        },
+      ]);
+    });
+
+    it('returns matching parties in the correct format in the case that there is a null officerRiskDate and the request is successful', async () => {
+      const searchText = 'searchText';
+
+      mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText, acbsResponseWithNullOfficerRiskDate);
+
+      const response = await getPartyBySearchTextService.getPartyBySearchText(idToken, searchText);
+
+      expect(response).toStrictEqual([
+        {
+          alternateIdentifier: '00309999',
+          industryClassification: '2401',
+          name1: 'ACTUAL IMPORT EXPORT',
+          name2: '',
+          name3: '',
+          smeType: '20',
+          citizenshipClass: '2',
+          officerRiskDate: null,
+          countryCode: 'DZA',
         },
       ]);
     });
@@ -162,13 +199,13 @@ describe('GetPartyBySearchTextService', () => {
     });
   });
 
-  function mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText: string): void {
+  function mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText: string, response: AcbsGetPartyBySearchTextResponseElement[]): void {
     // eslint-disable-next-line jest/unbound-method
     when(httpService.get)
       .calledWith(...getExpectedGetPartyBySearchTextArguments(searchText))
       .mockReturnValueOnce(
         of({
-          data: acbsResponse,
+          data: response,
           status: 200,
           statusText: 'OK',
           config: undefined,
