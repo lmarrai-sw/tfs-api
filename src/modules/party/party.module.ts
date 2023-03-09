@@ -1,8 +1,8 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
 import { AcbsModule } from '@ukef/module/acbs/acbs.module';
+
 import { GetPartyBySearchTextService } from './get-party-by-search-text.service';
 import { PartyController } from './party.controller';
 @Module({
