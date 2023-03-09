@@ -156,6 +156,27 @@ describe('PartyService', () => {
         },
       ]);
     });
+
+    it('returns an empty array if the request is successful and there are no matching parties', async () => {
+      const searchText = 'searchText';
+      
+      // eslint-disable-next-line jest/unbound-method
+      when(httpService.get)
+      .calledWith(...getExpectedGetPartiesBySearchTextArguments(searchText))
+      .mockReturnValueOnce(
+        of({
+          data: [],
+          status: 200,
+          statusText: 'OK',
+          config: undefined,
+          headers: undefined,
+        }),
+      );
+
+      const response = await partyService.getPartiesBySearchText(idToken, searchText);
+
+      expect(response).toStrictEqual([]);
+    });
   });
 
   describe('failed request', () => {
