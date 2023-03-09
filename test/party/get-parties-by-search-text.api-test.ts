@@ -2,7 +2,7 @@ import { Api } from '@ukef-test/support/api';
 import { RandomValueGenerator } from '@ukef-test/support/random-value-generator';
 import nock from 'nock';
 
-describe('GET /party?searchText={searchText}', () => {
+describe('GET /parties?searchText={searchText}', () => {
   const valueGenerator = new RandomValueGenerator();
 
   const searchText = valueGenerator.stringOfNumericCharacters(3);
@@ -95,9 +95,9 @@ describe('GET /party?searchText={searchText}', () => {
 
   it('returns a 200 response with the matching parties if they are returned by ACBS', async () => {
     givenAuthenticationWithTheIdpSucceeds();
-    requestToGetPartyBySearchText().reply(200, partiesInAcbs);
+    requestToGetPartiesBySearchText().reply(200, partiesInAcbs);
 
-    const { status, body } = await api.get(`/api/v1/party?searchText=${searchText}`);
+    const { status, body } = await api.get(`/api/v1/parties?searchText=${searchText}`);
 
     expect(status).toBe(200);
     expect(body).toStrictEqual(JSON.parse(JSON.stringify(expectedParties)));
@@ -105,9 +105,9 @@ describe('GET /party?searchText={searchText}', () => {
 
   it('returns a 200 response with an empty array of parties if ACBS returns a 200 response with an empty array of parties', async () => {
     givenAuthenticationWithTheIdpSucceeds();
-    requestToGetPartyBySearchText().reply(200, []);
+    requestToGetPartiesBySearchText().reply(200, []);
 
-    const { status, body } = await api.get(`/api/v1/party?searchText=${searchText}`);
+    const { status, body } = await api.get(`/api/v1/parties?searchText=${searchText}`);
 
     expect(status).toBe(200);
     expect(body).toStrictEqual([]);
@@ -133,7 +133,7 @@ describe('GET /party?searchText={searchText}', () => {
       },
     );
 
-    const { status, body } = await api.get(`/api/v1/party?searchText=${searchText}`);
+    const { status, body } = await api.get(`/api/v1/parties?searchText=${searchText}`);
 
     expect(status).toBe(500);
     expect(body).toStrictEqual({
@@ -146,7 +146,7 @@ describe('GET /party?searchText={searchText}', () => {
     givenCreatingASessionWithTheIdpSucceeds();
     requestToGetAnIdTokenFromTheIdp().reply(403, '<!doctype html><html><body><div>Access to the requested resource has been forbidden.</div></body></html>');
 
-    const { status, body } = await api.get(`/api/v1/party?searchText=${searchText}`);
+    const { status, body } = await api.get(`/api/v1/parties?searchText=${searchText}`);
 
     expect(status).toBe(500);
     expect(body).toStrictEqual({
@@ -157,9 +157,9 @@ describe('GET /party?searchText={searchText}', () => {
 
   it('returns a 500 response if ACBS returns a status code that is not 200 or 400', async () => {
     givenAuthenticationWithTheIdpSucceeds();
-    requestToGetPartyBySearchText().reply(401);
+    requestToGetPartiesBySearchText().reply(401);
 
-    const { status, body } = await api.get(`/api/v1/party?searchText=${searchText}`);
+    const { status, body } = await api.get(`/api/v1/parties?searchText=${searchText}`);
 
     expect(status).toBe(500);
     expect(body).toStrictEqual({
@@ -171,9 +171,9 @@ describe('GET /party?searchText={searchText}', () => {
   it('returns a 500 response if creating a session with the IdP times out', async () => {
     requestToCreateASessionWithTheIdp().delay(1500).reply(201, '', { 'set-cookie': 'JSESSIONID=1' });
     givenGettingAnIdTokenFromTheIdpSucceeds();
-    requestToGetPartyBySearchText().reply(200, partiesInAcbs);
+    requestToGetPartiesBySearchText().reply(200, partiesInAcbs);
 
-    const { status, body } = await api.get(`/api/v1/party?searchText=${searchText}`);
+    const { status, body } = await api.get(`/api/v1/parties?searchText=${searchText}`);
 
     expect(status).toBe(500);
     expect(body).toStrictEqual({
@@ -185,9 +185,9 @@ describe('GET /party?searchText={searchText}', () => {
   it('returns a 500 response if getting an id token from the IdP times out', async () => {
     givenCreatingASessionWithTheIdpSucceeds();
     requestToGetAnIdTokenFromTheIdp().delay(1500).reply(200, { id_token: idToken });
-    requestToGetPartyBySearchText().reply(200, partiesInAcbs);
+    requestToGetPartiesBySearchText().reply(200, partiesInAcbs);
 
-    const { status, body } = await api.get(`/api/v1/party?searchText=${searchText}`);
+    const { status, body } = await api.get(`/api/v1/parties?searchText=${searchText}`);
 
     expect(status).toBe(500);
     expect(body).toStrictEqual({
@@ -198,9 +198,9 @@ describe('GET /party?searchText={searchText}', () => {
 
   it('returns a 500 response if getting the parties from ACBS times out', async () => {
     givenAuthenticationWithTheIdpSucceeds();
-    requestToGetPartyBySearchText().delay(1500).reply(200, partiesInAcbs);
+    requestToGetPartiesBySearchText().delay(1500).reply(200, partiesInAcbs);
 
-    const { status, body } = await api.get(`/api/v1/party?searchText=${searchText}`);
+    const { status, body } = await api.get(`/api/v1/parties?searchText=${searchText}`);
 
     expect(status).toBe(500);
     expect(body).toStrictEqual({
@@ -209,8 +209,8 @@ describe('GET /party?searchText={searchText}', () => {
     });
   });
 
-  it('returns a 400 response if the request is sent to /party', async () => {
-    const { status, body } = await api.get(`/api/v1/party`);
+  it('returns a 400 response if the request is sent to /parties', async () => {
+    const { status, body } = await api.get(`/api/v1/parties`);
 
     expect(status).toBe(400);
     expect(body).toStrictEqual({
@@ -220,8 +220,8 @@ describe('GET /party?searchText={searchText}', () => {
     });
   });
 
-  it('returns a 400 response if the request is sent to /party?searchText', async () => {
-    const { status, body } = await api.get(`/api/v1/party?searchText`);
+  it('returns a 400 response if the request is sent to /parties?searchText', async () => {
+    const { status, body } = await api.get(`/api/v1/parties?searchText`);
 
     expect(status).toBe(400);
     expect(body).toStrictEqual({
@@ -231,8 +231,8 @@ describe('GET /party?searchText={searchText}', () => {
     });
   });
 
-  it('returns a 400 response if the request is sent to /party?searchText=', async () => {
-    const { status, body } = await api.get(`/api/v1/party?searchText=`);
+  it('returns a 400 response if the request is sent to /parties?searchText=', async () => {
+    const { status, body } = await api.get(`/api/v1/parties?searchText=`);
 
     expect(status).toBe(400);
     expect(body).toStrictEqual({
@@ -243,7 +243,7 @@ describe('GET /party?searchText={searchText}', () => {
   });
 
   it('returns a 400 response if searchText is less than 3 characters', async () => {
-    const { status, body } = await api.get(`/api/v1/party?searchText=00`);
+    const { status, body } = await api.get(`/api/v1/parties?searchText=00`);
 
     expect(status).toBe(400);
     expect(body).toStrictEqual({
@@ -279,6 +279,6 @@ describe('GET /party?searchText={searchText}', () => {
     givenGettingAnIdTokenFromTheIdpSucceeds();
   };
 
-  const requestToGetPartyBySearchText = (): nock.Interceptor =>
+  const requestToGetPartiesBySearchText = (): nock.Interceptor =>
     nock('https://test-acbs-url.com/base-url').get(`/Party/Search/${searchText}`).matchHeader('authorization', `Bearer ${idToken}`);
 });

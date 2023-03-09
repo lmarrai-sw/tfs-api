@@ -4,9 +4,9 @@ import { ConfigType } from '@nestjs/config';
 import AcbsConfig from '@ukef/config/acbs.config';
 import { lastValueFrom } from 'rxjs';
 
-import { AcbsGetPartyBySearchTextResponseElement } from './dto/acbs-get-party-by-search-text-response-element.dto';
-import { GetPartyBySearchTextResponseElement } from './dto/get-party-by-search-text-response-element.dto';
-import { GetPartyBySearchTextFailedException } from './exception/get-party-by-search-text-failed.exception';
+import { AcbsGetPartiesBySearchTextResponseElement } from './dto/acbs-get-parties-by-search-text-response-element.dto';
+import { GetPartiesBySearchTextResponseElement } from './dto/get-parties-by-search-text-response-element.dto';
+import { GetPartiesBySearchTextException } from './exception/get-parties-by-search-text.exception';
 
 @Injectable()
 export class PartyService {
@@ -18,17 +18,17 @@ export class PartyService {
     private readonly httpService: HttpService,
   ) {}
 
-  async getPartiesBySearchText(token: string, searchText: string): Promise<GetPartyBySearchTextResponseElement[]> {
+  async getPartiesBySearchText(token: string, searchText: string): Promise<GetPartiesBySearchTextResponseElement[]> {
     if (searchText === null) {
-      throw new GetPartyBySearchTextFailedException('The required query parameter searchText was not specified.');
+      throw new GetPartiesBySearchTextException('The required query parameter searchText was not specified.');
     }
 
     if (searchText === '') {
-      throw new GetPartyBySearchTextFailedException('The query parameter searchText must be non-empty.');
+      throw new GetPartiesBySearchTextException('The query parameter searchText must be non-empty.');
     }
 
     if (typeof searchText === 'string' && searchText.length < 3) {
-      throw new GetPartyBySearchTextFailedException('The query parameter searchText must be at least 3 characters.');
+      throw new GetPartiesBySearchTextException('The query parameter searchText must be at least 3 characters.');
     }
 
     const acbsRequest = {
@@ -39,7 +39,7 @@ export class PartyService {
     };
 
     const response = await lastValueFrom(
-      this.httpService.get<AcbsGetPartyBySearchTextResponseElement[]>(`${PartyService.getPartiesBySearchTextPath}/${searchText}`, acbsRequest),
+      this.httpService.get<AcbsGetPartiesBySearchTextResponseElement[]>(`${PartyService.getPartiesBySearchTextPath}/${searchText}`, acbsRequest),
     )
       .then((acbsResponse) =>
         acbsResponse.data.map((element) => ({
@@ -55,7 +55,7 @@ export class PartyService {
         })),
       )
       .catch((error) => {
-        throw new GetPartyBySearchTextFailedException('Failed to get parties from ACBS.', error);
+        throw new GetPartiesBySearchTextException('Failed to get parties from ACBS.', error);
       });
 
     return response;

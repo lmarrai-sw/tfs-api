@@ -1,11 +1,11 @@
 import { HttpService } from '@nestjs/axios';
-import { GetPartyBySearchTextFailedException } from '@ukef/modules/party/exception/get-party-by-search-text-failed.exception';
+import { GetPartiesBySearchTextException } from '@ukef/modules/party/exception/get-parties-by-search-text.exception';
 import { PartyService } from '@ukef/modules/party/party.service';
 import { AxiosError } from 'axios';
 import { when } from 'jest-when';
 import { of, throwError } from 'rxjs';
 
-import { AcbsGetPartyBySearchTextResponseElement } from './dto/acbs-get-party-by-search-text-response-element.dto';
+import { AcbsGetPartiesBySearchTextResponseElement } from './dto/acbs-get-parties-by-search-text-response-element.dto';
 
 describe('PartyService', () => {
   const config = { baseUrl: 'the base url' };
@@ -14,7 +14,7 @@ describe('PartyService', () => {
   let httpService: HttpService;
   let partyService: PartyService;
 
-  const getExpectedGetPartyBySearchTextArguments = (searchText: string): [string, object] => [
+  const getExpectedGetPartiesBySearchTextArguments = (searchText: string): [string, object] => [
     '/Party/Search/' + searchText,
     {
       baseURL: 'the base url',
@@ -24,7 +24,7 @@ describe('PartyService', () => {
     },
   ];
 
-  const acbsResponse: AcbsGetPartyBySearchTextResponseElement[] = [
+  const acbsResponse: AcbsGetPartiesBySearchTextResponseElement[] = [
     {
       PartyAlternateIdentifier: '00309999',
       IndustryClassification: { IndustryClassificationCode: '2401' },
@@ -49,7 +49,7 @@ describe('PartyService', () => {
     },
   ];
 
-  const acbsResponseWithNullOfficerRiskDate: AcbsGetPartyBySearchTextResponseElement[] = [
+  const acbsResponseWithNullOfficerRiskDate: AcbsGetPartiesBySearchTextResponseElement[] = [
     {
       PartyAlternateIdentifier: '00309999',
       IndustryClassification: { IndustryClassificationCode: '2401' },
@@ -72,7 +72,7 @@ describe('PartyService', () => {
     it('returns matching parties in the correct format if the request is successful', async () => {
       const searchText = 'searchText';
 
-      mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText, acbsResponse);
+      mockSuccessfulAcbsGetPartiesBySearchTextRequest(searchText, acbsResponse);
 
       const response = await partyService.getPartiesBySearchText(idToken, searchText);
 
@@ -105,7 +105,7 @@ describe('PartyService', () => {
     it('returns matching parties in the correct format if the query parameter searchText is exactly 3 characters and the request is successful', async () => {
       const searchText = '999';
 
-      mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText, acbsResponse);
+      mockSuccessfulAcbsGetPartiesBySearchTextRequest(searchText, acbsResponse);
 
       const response = await partyService.getPartiesBySearchText(idToken, searchText);
 
@@ -138,7 +138,7 @@ describe('PartyService', () => {
     it('returns matching parties in the correct format in the case that there is a null officerRiskDate and the request is successful', async () => {
       const searchText = 'searchText';
 
-      mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText, acbsResponseWithNullOfficerRiskDate);
+      mockSuccessfulAcbsGetPartiesBySearchTextRequest(searchText, acbsResponseWithNullOfficerRiskDate);
 
       const response = await partyService.getPartiesBySearchText(idToken, searchText);
 
@@ -159,51 +159,51 @@ describe('PartyService', () => {
   });
 
   describe('failed request', () => {
-    it('throws a GetPartyBySearchTextFailedException if there is an error when getting parties from ACBS', async () => {
+    it('throws a GetPartiesBySearchTextException if there is an error when getting parties from ACBS', async () => {
       const searchText = 'searchText';
-      const getPartyError = new AxiosError();
+      const getPartiesError = new AxiosError();
 
       // eslint-disable-next-line jest/unbound-method
       when(httpService.get)
-        .calledWith(...getExpectedGetPartyBySearchTextArguments(searchText))
-        .mockReturnValueOnce(throwError(() => getPartyError));
+        .calledWith(...getExpectedGetPartiesBySearchTextArguments(searchText))
+        .mockReturnValueOnce(throwError(() => getPartiesError));
 
       const responsePromise = partyService.getPartiesBySearchText(idToken, searchText);
 
-      await expect(responsePromise).rejects.toBeInstanceOf(GetPartyBySearchTextFailedException);
+      await expect(responsePromise).rejects.toBeInstanceOf(GetPartiesBySearchTextException);
       await expect(responsePromise).rejects.toThrow('Failed to get parties from ACBS.');
-      await expect(responsePromise).rejects.toHaveProperty('innerError', getPartyError);
+      await expect(responsePromise).rejects.toHaveProperty('innerError', getPartiesError);
     });
 
-    it('throws a GetPartyBySearchTextFailedException if the required query parameter searchText is not specified', async () => {
+    it('throws a GetPartiesBySearchTextException if the required query parameter searchText is not specified', async () => {
       const responsePromise = partyService.getPartiesBySearchText(idToken, null);
 
-      await expect(responsePromise).rejects.toBeInstanceOf(GetPartyBySearchTextFailedException);
+      await expect(responsePromise).rejects.toBeInstanceOf(GetPartiesBySearchTextException);
       await expect(responsePromise).rejects.toThrow('The required query parameter searchText was not specified.');
       await expect(responsePromise).rejects.toHaveProperty('innerError', undefined);
     });
 
-    it('throws a GetPartyBySearchTextFailedException if the query parameter searchText is empty', async () => {
+    it('throws a GetPartiesBySearchTextException if the query parameter searchText is empty', async () => {
       const responsePromise = partyService.getPartiesBySearchText(idToken, '');
 
-      await expect(responsePromise).rejects.toBeInstanceOf(GetPartyBySearchTextFailedException);
+      await expect(responsePromise).rejects.toBeInstanceOf(GetPartiesBySearchTextException);
       await expect(responsePromise).rejects.toThrow('The query parameter searchText must be non-empty.');
       await expect(responsePromise).rejects.toHaveProperty('innerError', undefined);
     });
 
-    it('throws a GetPartyBySearchTextFailedException if the query parameter searchText is less than 3 characters', async () => {
+    it('throws a GetPartiesBySearchTextException if the query parameter searchText is less than 3 characters', async () => {
       const responsePromise = partyService.getPartiesBySearchText(idToken, '00');
 
-      await expect(responsePromise).rejects.toBeInstanceOf(GetPartyBySearchTextFailedException);
+      await expect(responsePromise).rejects.toBeInstanceOf(GetPartiesBySearchTextException);
       await expect(responsePromise).rejects.toThrow('The query parameter searchText must be at least 3 characters.');
       await expect(responsePromise).rejects.toHaveProperty('innerError', undefined);
     });
   });
 
-  function mockSuccessfulAcbsGetPartyBySearchTextRequest(searchText: string, response: AcbsGetPartyBySearchTextResponseElement[]): void {
+  function mockSuccessfulAcbsGetPartiesBySearchTextRequest(searchText: string, response: AcbsGetPartiesBySearchTextResponseElement[]): void {
     // eslint-disable-next-line jest/unbound-method
     when(httpService.get)
-      .calledWith(...getExpectedGetPartyBySearchTextArguments(searchText))
+      .calledWith(...getExpectedGetPartiesBySearchTextArguments(searchText))
       .mockReturnValueOnce(
         of({
           data: response,
