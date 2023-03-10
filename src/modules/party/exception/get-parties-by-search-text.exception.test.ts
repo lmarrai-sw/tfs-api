@@ -1,4 +1,4 @@
-import { RandomValueGenerator } from '@ukef-test/support/random-value-generator';
+import { RandomValueGenerator } from '@ukef-test/support/generator/random-value-generator';
 
 import { GetPartiesBySearchTextException } from './get-parties-by-search-text.exception';
 import { PartyException } from './party-exception';

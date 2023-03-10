@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiInternalServerErrorResponse, ApiOkResponse, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiInternalServerErrorResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
 import { AcbsAuthenticationService } from '../acbs/acbs-authentication.service';
 import { GetPartiesBySearchTextResponse, GetPartiesBySearchTextResponseElement } from './dto/get-parties-by-search-text-response-element.dto';
